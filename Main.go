@@ -13,11 +13,7 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
-
-
-
-
-func handleWebRequests(w http.ResponseWriter, r *http.Request){
+func handleWebRequests(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Дратути")
 }
 
@@ -44,37 +40,63 @@ func main() {
 	updates, err := bot.GetUpdatesChan(u)
 
 	for update := range updates {
+		if update.CallbackQuery != nil {
+			cbq := update.CallbackQuery
+
+			newLang := fmt.Sprintf("ru-%s", cbq.Data)
+			textToTranslate := cbq.Message.ReplyToMessage.Text
+			newTranslation := translateWithYandex(textToTranslate, newLang)
+			mssg := tgbotapi.NewEditMessageText(cbq.Message.Chat.ID, cbq.Message.MessageID, newTranslation)
+			bot.Send(mssg)
+			continue
+		}
+
 		if update.Message == nil {
+			continue
+		}
+
+		if update.Message.IsCommand() {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Это было команда. Меня не проведешь!")
+			msg.ReplyToMessageID = update.Message.MessageID
+
+			bot.Send(msg)
 			continue
 		}
 
 		fmt.Printf("[%s] %s\n\n", update.Message.From.UserName, update.Message.Text)
 
 		inputText := update.Message.Text;
-
 		language := detectLanguage(inputText)
 		direction := getTranslateDirection(language)
 
 		translation := translateWithYandex(inputText, direction)
 
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, translation)
+
+		if translation != "ru" {
+			inlineBtns := []tgbotapi.InlineKeyboardButton{
+				tgbotapi.NewInlineKeyboardButtonData("english", "en"),
+				tgbotapi.NewInlineKeyboardButtonData("french", "fr"),
+				//tgbotapi.NewInlineKeyboardButtonData("deutsch", "de"),
+			}
+			msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(inlineBtns)
+		}
+
 		msg.ReplyToMessageID = update.Message.MessageID
 
 		bot.Send(msg)
 	}
 }
 
-func getTranslateDirection(code string) string{
+func getTranslateDirection(code string) string {
 	switch code {
-	case "de":
-		return "de-ru"
 	case "ru":
 		return "ru-de"
 	}
-	return "x3"
+	return fmt.Sprintf("%s-ru", code)
 }
 
-func SetupServer(){
+func SetupServer() {
 	portStr := os.Getenv("PORT")
 
 	if portStr == "" {
@@ -97,7 +119,7 @@ func translateWithNaturalIntelligence(text string) string {
 	return translation
 }
 
-func detectLanguage(text string) string{
+func detectLanguage(text string) string {
 	type DetectResponse struct {
 		Code int
 		Lang string
