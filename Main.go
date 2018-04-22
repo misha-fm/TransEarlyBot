@@ -52,7 +52,8 @@ func testJson() {
 }
 
 func main() {
-	bot, err := tgbotapi.NewBotAPI("553819518:AAED-IwPcfGwJlRkv0zaM-cYmDdDNxcc23Y")
+	tg_token := os.Getenv("TG_TOKEN")
+	bot, err := tgbotapi.NewBotAPI(tg_token)
 	if err != nil {
 		fmt.Println("Panic!!! ")
 		fmt.Print(err)
@@ -93,7 +94,7 @@ func translateWithNaturalIntelligence(text string) string {
 }
 
 func translateWithYandex(text string) string {
-	const API_TOKEN = "trnsl.1.1.20180422T104932Z.80fabbeabb361973.792644153edd4675c7d73371d7ab55ccea88e209"
+	ya_token := os.Getenv("YA_TOKEN")
 
 	var Url *url.URL
 
@@ -103,7 +104,7 @@ func translateWithYandex(text string) string {
 	}
 
 	params := url.Values{}
-	params.Add("key", API_TOKEN)
+	params.Add("key", ya_token)
 	params.Add("lang", "de-ru")
 	params.Add("text", text)
 	Url.RawQuery = params.Encode()
