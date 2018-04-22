@@ -4,12 +4,13 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"gopkg.in/telegram-bot-api.v4"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 	"log"
+	"strconv"
+	"gopkg.in/telegram-bot-api.v4"
 )
 
 type TranslateResponse struct {
@@ -53,21 +54,11 @@ func testJson() {
 }
 
 func handleWebRequests(w http.ResponseWriter, r *http.Request){
-	fmt.Fprintf(w, "Дратути")
+	fmt.Fprint(w, "Дратути")
 }
 
 func main() {
-
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		// TODO handle error
-	}
-
-	httpBinding := fmt.Sprintf(":%d", port)
-	http.HandleFunc("/", handleWebRequests)
-	log.Fatal(http.ListenAndServe(httpBinding, nil))
-
+	go SetupServer()
 
 	tg_token := os.Getenv("TG_TOKEN") // TODO check if it exists
 	bot, err := tgbotapi.NewBotAPI(tg_token)
@@ -99,6 +90,20 @@ func main() {
 
 		bot.Send(msg)
 	}
+}
+
+func SetupServer(){
+	portStr := os.Getenv("PORT")
+
+	if portStr == "" {
+		// TODO handle error
+	}
+
+	port, _ := strconv.Atoi(portStr)
+
+	httpBinding := fmt.Sprintf(":%d", port)
+	http.HandleFunc("/", handleWebRequests)
+	log.Fatal(http.ListenAndServe(httpBinding, nil))
 }
 
 func translateWithNaturalIntelligence(text string) string {
