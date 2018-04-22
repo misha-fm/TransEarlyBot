@@ -19,40 +19,6 @@ type TranslateResponse struct {
 	Text []string
 }
 
-func main2() {
-	textToTranslate := "ich versuche weitere assets zu erstellen und dann auch noch ein paar supplies"
-
-	translation := translateWithYandex(textToTranslate)
-
-	fmt.Printf("Translation: %s", translation)
-
-	//testJson()
-}
-
-func testJson() {
-
-	rawJson := []byte(`{
-    "code": 200,
-    "lang": "de-ru",
-    "text": [
-        "я пытаюсь создать дополнительные ресурсы и потом еще пару supplies"
-    ]
-}`)
-
-	var bodySerialized TranslateResponse
-
-	err := json.Unmarshal(rawJson, &bodySerialized)
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-	} else {
-		code := bodySerialized.Code
-		lang := bodySerialized.Lang
-		text := bodySerialized.Text
-
-		fmt.Printf("code: %d\nlang: %s\ntext: %s\n", code, lang, text[0])
-	}
-}
-
 func handleWebRequests(w http.ResponseWriter, r *http.Request){
 	fmt.Fprint(w, "Дратути")
 }
@@ -64,12 +30,12 @@ func main() {
 	bot, err := tgbotapi.NewBotAPI(tg_token)
 	if err != nil {
 		fmt.Println("Panic!!! ")
-		fmt.Print(err)
+		fmt.Println(err)
 	}
 
 	bot.Debug = false
 
-	fmt.Printf("Authorized on account %s", bot.Self.UserName)
+	fmt.Printf("Authorized on account %s\n", bot.Self.UserName)
 
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
