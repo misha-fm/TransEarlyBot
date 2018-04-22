@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"log"
 )
 
 type TranslateResponse struct {
@@ -51,7 +52,23 @@ func testJson() {
 	}
 }
 
+func handleWebRequests(w http.ResponseWriter, r *http.Request){
+	fmt.Fprintf(w, "Дратути")
+}
+
 func main() {
+
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		// TODO handle error
+	}
+
+	httpBinding := fmt.Sprintf(":%d", port)
+	http.HandleFunc("/", handleWebRequests)
+	log.Fatal(http.ListenAndServe(httpBinding, nil))
+
+
 	tg_token := os.Getenv("TG_TOKEN") // TODO check if it exists
 	bot, err := tgbotapi.NewBotAPI(tg_token)
 	if err != nil {
