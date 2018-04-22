@@ -52,7 +52,7 @@ func testJson() {
 }
 
 func main() {
-	tg_token := os.Getenv("TG_TOKEN")
+	tg_token := os.Getenv("TG_TOKEN") // TODO check if it exists
 	bot, err := tgbotapi.NewBotAPI(tg_token)
 	if err != nil {
 		fmt.Println("Panic!!! ")
@@ -94,7 +94,7 @@ func translateWithNaturalIntelligence(text string) string {
 }
 
 func translateWithYandex(text string) string {
-	ya_token := os.Getenv("YA_TOKEN")
+	ya_token := os.Getenv("YA_TOKEN") // TODO check if it exists
 
 	var Url *url.URL
 
