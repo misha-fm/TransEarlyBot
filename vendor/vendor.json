@@ -1,0 +1,19 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "mYrkYI/2iFOlfvPzsjYIKO8KUGY=",
+			"path": "github.com/technoweenie/multipartstreamer",
+			"revision": "a90a01d73ae432e2611d178c18367fbaa13e0154",
+			"revisionTime": "2013-10-20T00:18:33Z"
+		},
+		{
+			"checksumSHA1": "E/ocikF97QMi5COISrPAX/GDXuQ=",
+			"path": "gopkg.in/telegram-bot-api.v4",
+			"revision": "0e0af0c480ea98e982d5f4d45fb39577c6ab1e3e",
+			"revisionTime": "2018-03-28T13:10:29Z"
+		}
+	],
+	"rootPath": "github.com/misha-fm/TransEarlyBot"
+}

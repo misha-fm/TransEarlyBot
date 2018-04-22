@@ -1,14 +1,14 @@
 package main
 
 import (
-	"gopkg.in/telegram-bot-api.v4"
-	"os"
 	"bufio"
-	"fmt"
 	"encoding/json"
-	"net/http"
+	"fmt"
+	"gopkg.in/telegram-bot-api.v4"
 	"io/ioutil"
+	"net/http"
 	"net/url"
+	"os"
 )
 
 type TranslateResponse struct {
@@ -17,7 +17,7 @@ type TranslateResponse struct {
 	Text []string
 }
 
-func main2(){
+func main2() {
 	textToTranslate := "ich versuche weitere assets zu erstellen und dann auch noch ein paar supplies"
 
 	translation := translateWithYandex(textToTranslate)
@@ -27,7 +27,7 @@ func main2(){
 	//testJson()
 }
 
-func testJson(){
+func testJson() {
 
 	rawJson := []byte(`{
     "code": 200,
@@ -45,7 +45,7 @@ func testJson(){
 	} else {
 		code := bodySerialized.Code
 		lang := bodySerialized.Lang
-		text :=bodySerialized.Text
+		text := bodySerialized.Text
 
 		fmt.Printf("code: %d\nlang: %s\ntext: %s\n", code, lang, text[0])
 	}
@@ -83,7 +83,7 @@ func main() {
 	}
 }
 
-func translateWithNaturalIntelligence(text string) string{
+func translateWithNaturalIntelligence(text string) string {
 	input := bufio.NewScanner(os.Stdin)
 	fmt.Print("Перевод: ")
 
@@ -92,17 +92,17 @@ func translateWithNaturalIntelligence(text string) string{
 	return translation
 }
 
-func translateWithYandex(text string) string{
+func translateWithYandex(text string) string {
 	const API_TOKEN = "trnsl.1.1.20180422T104932Z.80fabbeabb361973.792644153edd4675c7d73371d7ab55ccea88e209"
 
 	var Url *url.URL
 
-	Url, err := url.Parse("https://translate.yandex.net/api/v1.5/tr.json/translate");
+	Url, err := url.Parse("https://translate.yandex.net/api/v1.5/tr.json/translate")
 	if err != nil {
 		panic("AAAAA")
 	}
 
-	params := url.Values {}
+	params := url.Values{}
 	params.Add("key", API_TOKEN)
 	params.Add("lang", "de-ru")
 	params.Add("text", text)
@@ -112,7 +112,7 @@ func translateWithYandex(text string) string{
 
 	//fmt.Printf("Encoded URL is %q\n", Url.String())
 
-	if err!=nil {
+	if err != nil {
 
 	}
 	defer resp.Body.Close()
